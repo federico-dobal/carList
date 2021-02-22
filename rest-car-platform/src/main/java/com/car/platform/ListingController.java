@@ -2,6 +2,7 @@ package com.car.platform;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,40 @@ class ListingController {
     List<Listing> allListings() {
         return repository.findAll();
     }
+
+    /**
+     * Get all the listing details
+     * @return details of each listing
+     */
+    @GetMapping("/listings/search")
+    List<Listing> searchListings(@RequestParam("make") Optional<String> make,
+                                 @RequestParam("model") Optional<String> model,
+                                 @RequestParam("year") Optional<Integer> year,
+                                 @RequestParam("color") Optional<String> color) {
+        List<Listing> allListings = repository.findAll();
+        if(make.isPresent()) {
+            allListings = allListings.stream().filter(listing -> make.get().equals(listing.getMake())).collect(Collectors.toList());
+        }
+
+        if(model.isPresent()) {
+            allListings = allListings.stream().filter(listing -> model.get().equals(listing.getModel())).collect(Collectors.toList());
+        }
+
+        if(year.isPresent()) {
+
+            allListings.stream().forEach(x -> {
+                System.out.println("YEAr is present |" + year.get() + "| |" + x.getYear() + "| |" + (year.get() ==  x.getYear().intValue()));
+            });
+            allListings = allListings.stream().filter(listing -> year.get() == listing.getYear().intValue()).collect(Collectors.toList());
+        }
+
+        if(color.isPresent()) {
+            allListings = allListings.stream().filter(listing -> color.get().equals(listing.getColor())).collect(Collectors.toList());
+        }
+
+        return allListings;
+    }
+
 
     /**
      * Upload a list of listings by file upload
