@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,28 +41,25 @@ class ListingController {
                                  @RequestParam("model") Optional<String> model,
                                  @RequestParam("year") Optional<Integer> year,
                                  @RequestParam("color") Optional<String> color) {
-        List<Listing> allListings = repository.findAll();
+        Listing listing = new Listing();
+
         if(make.isPresent()) {
-            allListings = allListings.stream().filter(listing -> make.get().equals(listing.getMake())).collect(Collectors.toList());
+            listing.setMake(make.get());
         }
 
         if(model.isPresent()) {
-            allListings = allListings.stream().filter(listing -> model.get().equals(listing.getModel())).collect(Collectors.toList());
+            listing.setModel(model.get());
         }
 
         if(year.isPresent()) {
-
-            allListings.stream().forEach(x -> {
-                System.out.println("YEAr is present |" + year.get() + "| |" + x.getYear() + "| |" + (year.get() ==  x.getYear().intValue()));
-            });
-            allListings = allListings.stream().filter(listing -> year.get() == listing.getYear().intValue()).collect(Collectors.toList());
+            listing.setYear(year.get());
         }
 
         if(color.isPresent()) {
-            allListings = allListings.stream().filter(listing -> color.get().equals(listing.getColor())).collect(Collectors.toList());
+            listing.setColor(color.get());
         }
 
-        return allListings;
+        return repository.findAll(Example.of(listing));
     }
 
 
