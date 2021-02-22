@@ -9,9 +9,23 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+class FileParserException extends RuntimeException {
+    FileParserException(String message) {
+        super(message);
+    }
+}
+
 public class FileParser {
 
-    public static List<Listing> parseFile(MultipartFile file, Long dealerId){
+    public static List<Listing> parseFile(MultipartFile file, Long dealerId) throws IllegalArgumentException {
+        if (file == null) {
+            throw new IllegalArgumentException("Cannot parse file since it is null");
+        }
+
+        if (dealerId == null) {
+            throw new IllegalArgumentException("Cannot parse file since dealerId is null");
+        }
+
         List<Listing> listings = new ArrayList<>();
 
         // parse CSV file to create a list of `User` objects
@@ -54,7 +68,6 @@ public class FileParser {
             System.out.println("Error reading file" + ex.getMessage());
         }
 
-        System.out.println(listings.size());
         return listings;
 
     }
