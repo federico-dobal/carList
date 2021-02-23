@@ -89,19 +89,25 @@ class ListingController {
         } else {
             List<Listing> allListings = FileParser.parseFile(file, dealerId);
             for (Listing newListing : allListings) {
-                Listing listingFromDb = repository.findByCodeAndDealerId(newListing.getCode(), newListing.getDealerId());
-                if (listingFromDb == null) {
-                    repository.save(newListing);
-                } else {
-                    newListing.setId(listingFromDb.getId());
-                    repository.save(newListing);
-                }
-
+                saveOrUpdateListing(newListing);
             }
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body("All listings imported successfully");
         }
+    }
+
+    /**
+     * Save or update listing
+     * @param listing listing to save or update
+     */
+    private void saveOrUpdateListing(Listing listing) {
+        Listing listingFromDb = repository.findByCodeAndDealerId(listing.getCode(), listing.getDealerId());
+        // If it is on DB update use Id from DB in order to update
+        if (listingFromDb != null) {
+            listing.setId(listingFromDb.getId());
+        }
+        repository.save(listing);
     }
 
     /**
@@ -112,7 +118,6 @@ class ListingController {
      */
     @PostMapping("/listings/vehicle_listings/{dealerId}")
     ResponseEntity<String> uploadVehicleListings(@RequestBody List<ListingInput> newListings, @PathVariable Long dealerId) {
-
         // validate file
         Optional<Dealer> dealerFromDb = dealerRepository.findById(dealerId);
         if (!dealerFromDb.isPresent()) {
@@ -134,13 +139,7 @@ class ListingController {
                 Listing newListing = new Listing(dealerId, listing.getCode(), listing.getMake(), listing.getModel(),
                         listing.getkW(), listing.getYear(), listing.getColor(), listing.getPrice());
 
-                Listing listingFromDb = repository.findByCodeAndDealerId(newListing.getCode(), newListing.getDealerId());
-                if (listingFromDb == null) {
-                    repository.save(newListing);
-                } else {
-                    newListing.setId(listingFromDb.getId());
-                    repository.save(newListing);
-                }
+                saveOrUpdateListing(newListing);
             }
 
             return ResponseEntity.status(HttpStatus.OK).body("All listings imported successfully");
