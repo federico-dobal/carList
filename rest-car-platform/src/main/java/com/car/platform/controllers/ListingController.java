@@ -143,7 +143,7 @@ class ListingController {
             for (ListingInput listing : newListings)
             {
                 Listing newListing = new Listing(dealerId, listing.getCode(), listing.getMake(), listing.getModel(),
-                        listing.getKW(), listing.getYear(), listing.getColor(), listing.getPrice());
+                        listing.getKw(), listing.getYear(), listing.getColor(), listing.getPrice());
 
                 saveOrUpdateListing(newListing);
             }
