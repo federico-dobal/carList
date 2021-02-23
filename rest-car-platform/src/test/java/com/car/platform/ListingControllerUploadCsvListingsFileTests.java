@@ -1,5 +1,10 @@
 package com.car.platform;
 
+import com.car.platform.controllers.ListingController;
+import com.car.platform.entity.Dealer;
+import com.car.platform.entity.Listing;
+import com.car.platform.repository.DealerRepository;
+import com.car.platform.repository.ListingRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -15,8 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;

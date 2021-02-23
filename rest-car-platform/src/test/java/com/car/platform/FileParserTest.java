@@ -1,5 +1,7 @@
 package com.car.platform;
 
+import com.car.platform.entity.Listing;
+import com.car.platform.utilities.FileParser;
 import junit.framework.TestCase;
 import org.junit.Test;
 import org.springframework.mock.web.MockMultipartFile;

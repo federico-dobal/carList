@@ -1,5 +1,6 @@
-package com.car.platform;
+package com.car.platform.utilities;
 
+import com.car.platform.entity.Listing;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;

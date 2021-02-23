@@ -1,8 +1,8 @@
-package com.car.platform;
+package com.car.platform.model;
 
 import java.util.Objects;
 
-class DealerInput {
+public class DealerInput {
 
     private String name;
 

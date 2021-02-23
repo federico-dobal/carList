@@ -1,16 +1,19 @@
 package com.car.platform;
 
+import com.car.platform.controllers.ListingController;
+import com.car.platform.entity.Dealer;
+import com.car.platform.entity.Listing;
+import com.car.platform.model.ListingInput;
+import com.car.platform.repository.DealerRepository;
+import com.car.platform.repository.ListingRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;

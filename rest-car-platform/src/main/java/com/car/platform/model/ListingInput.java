@@ -1,4 +1,4 @@
-package com.car.platform;
+package com.car.platform.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Objects;
 
-class ListingInput {
+public class ListingInput {
 
     private String code;
     private String make;

@@ -1,5 +1,9 @@
-package com.car.platform;
+package com.car.platform.controllers;
 
+import com.car.platform.entity.Dealer;
+import com.car.platform.model.DealerInput;
+import com.car.platform.exceptions.DealerNotFoundException;
+import com.car.platform.repository.DealerRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -7,11 +11,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-class DealerController {
+public class DealerController {
 
     private final DealerRepository repository;
 
-    DealerController(DealerRepository repository) {
+    public DealerController(DealerRepository repository) {
         this.repository = repository;
     }
 

@@ -1,4 +1,4 @@
-package com.car.platform;
+package com.car.platform.entity;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -8,7 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-class Listing implements Serializable {
+public class Listing implements Serializable {
 
     private @Id @GeneratedValue Long id;
     private Long dealerId;
@@ -21,8 +21,7 @@ class Listing implements Serializable {
     private Long price;
 
 
-    Listing() {}
-
+    public Listing() {}
 
     public Listing(Long dealerId, String code, String make, String model, Integer powerInPs, Integer year, String color, Long price) {
         this.dealerId = dealerId;

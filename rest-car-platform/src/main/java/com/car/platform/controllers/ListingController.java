@@ -1,17 +1,23 @@
-package com.car.platform;
+package com.car.platform.controllers;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
+import com.car.platform.entity.Dealer;
+import com.car.platform.entity.Listing;
+import com.car.platform.exceptions.ListingNotFoundException;
+import com.car.platform.model.ListingInput;
+import com.car.platform.repository.DealerRepository;
+import com.car.platform.repository.ListingRepository;
+import com.car.platform.utilities.FileParser;
 import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
+public
 class ListingController {
 
     private final ListingRepository repository;
@@ -28,7 +34,7 @@ class ListingController {
      * @return details of each listing
      */
     @GetMapping("/listings")
-    List<Listing> allListings() {
+    public List<Listing> allListings() {
         return repository.findAll();
     }
 
@@ -37,10 +43,10 @@ class ListingController {
      * @return details of each listing
      */
     @GetMapping("/listings/search")
-    List<Listing> searchListings(@RequestParam("make") Optional<String> make,
-                                 @RequestParam("model") Optional<String> model,
-                                 @RequestParam("year") Optional<Integer> year,
-                                 @RequestParam("color") Optional<String> color) {
+    public List<Listing> searchListings(@RequestParam("make") Optional<String> make,
+                                        @RequestParam("model") Optional<String> model,
+                                        @RequestParam("year") Optional<Integer> year,
+                                        @RequestParam("color") Optional<String> color) {
         Listing listing = new Listing();
 
         if(make.isPresent()) {
@@ -70,7 +76,7 @@ class ListingController {
      * @return POST response
      */
     @PostMapping("/listings/upload_csv/{dealerId}")
-    ResponseEntity<String> uploadCsvListing(@RequestParam("file") MultipartFile file, @PathVariable Long dealerId) {
+    public ResponseEntity<String> uploadCsvListing(@RequestParam("file") MultipartFile file, @PathVariable Long dealerId) {
 
         // validate file
         Optional<Dealer> dealerFromDb = dealerRepository.findById(dealerId);
@@ -117,7 +123,7 @@ class ListingController {
      * @return POST response
      */
     @PostMapping("/listings/vehicle_listings/{dealerId}")
-    ResponseEntity<String> uploadVehicleListings(@RequestBody List<ListingInput> newListings, @PathVariable Long dealerId) {
+    public ResponseEntity<String> uploadVehicleListings(@RequestBody List<ListingInput> newListings, @PathVariable Long dealerId) {
         // validate file
         Optional<Dealer> dealerFromDb = dealerRepository.findById(dealerId);
         if (!dealerFromDb.isPresent()) {

@@ -1,4 +1,4 @@
-package com.car.platform;
+package com.car.platform.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import java.util.Objects;
 
 @Entity
-class Dealer {
+public class Dealer {
 
     private @Id @GeneratedValue Long id;
     private String name;
