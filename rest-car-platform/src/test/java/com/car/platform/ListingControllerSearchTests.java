@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ListingControllerSearchTests {
 
     @Autowired
-    private ListingController controller;
+    private ListingController listingController;
 
     @Autowired
     private ListingRepository listingRepository;
@@ -59,7 +59,7 @@ public class ListingControllerSearchTests {
                 new ListingInput("12", "mercedes", "a 180", 123, 2016, "blue", 15950L),
                 new ListingInput("13", "skoda", "a 180", 123, 2018, "red", 15000L),
                 new ListingInput("14", "mercedes", "a 180", 123, 2016, "blue", 15000L));
-        controller.uploadVehicleListings(listingsUpload, dealerId);
+        listingController.uploadVehicleListings(listingsUpload, dealerId);
 
     }
 
@@ -67,11 +67,11 @@ public class ListingControllerSearchTests {
     public void searchListingsIsSuccessfullyWhenNoneFilterIsSet() {
 
         // GIVEN: 14 listing on the DB
-        List<Listing> listings = controller.allListings();
+        List<Listing> listings = listingController.allListings();
         assertThat(listings.size()).isEqualTo(14);
 
         // GIVEN: No filters are applied
-        listings = controller.searchListings(Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
+        listings = listingController.searchListings(Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
 
         // THEN: The number of listing is the same
         assertThat(listings.size()).isEqualTo(14);
@@ -82,11 +82,11 @@ public class ListingControllerSearchTests {
     public void searchListingsIsSuccessfullyWhenAllFilterAreAppliedNonEmptyResults() {
 
         // GIVEN: 14 listing on the DB
-        List<Listing> listings = controller.allListings();
+        List<Listing> listings = listingController.allListings();
         assertThat(listings.size()).isEqualTo(14);
 
         // GIVEN: Make filter is applied
-        listings = controller.searchListings(Optional.of("mercedes"), Optional.of("a 180"), Optional.of(2016), Optional.of("blue"));
+        listings = listingController.searchListings(Optional.of("mercedes"), Optional.of("a 180"), Optional.of(2016), Optional.of("blue"));
 
         // THEN: The number of listing retrieved is right and all its value agree with the filters
         assertThat(listings.size()).isEqualTo(2);
@@ -100,11 +100,11 @@ public class ListingControllerSearchTests {
     public void searchListingsIsSuccessfullyWhenAllFilterAreAppliedEmptyResults() {
 
         // GIVEN: 14 listing on the DB
-        List<Listing> listings = controller.allListings();
+        List<Listing> listings = listingController.allListings();
         assertThat(listings.size()).isEqualTo(14);
 
         // GIVEN: Make filter is applied
-        listings = controller.searchListings(Optional.of("mercedes"), Optional.of("a 100"), Optional.of(2016), Optional.of("blue"));
+        listings = listingController.searchListings(Optional.of("mercedes"), Optional.of("a 100"), Optional.of(2016), Optional.of("blue"));
 
         // THEN: The number of listing retrieved is right and all its value agree with the filters
         assertThat(listings.size()).isEqualTo(0);
@@ -115,11 +115,11 @@ public class ListingControllerSearchTests {
     public void searchListingsIsSuccessfullyWhenOnlyMakeFilterIsApplied() {
 
         // GIVEN: 14 listing on the DB
-        List<Listing> listings = controller.allListings();
+        List<Listing> listings = listingController.allListings();
         assertThat(listings.size()).isEqualTo(14);
 
         // GIVEN: Make filter is applied
-        listings = controller.searchListings(Optional.of("skoda"), Optional.empty(), Optional.empty(), Optional.empty());
+        listings = listingController.searchListings(Optional.of("skoda"), Optional.empty(), Optional.empty(), Optional.empty());
 
         // THEN: The number of listing retrieved is right and its make is skoda
         assertThat(listings.size()).isEqualTo(4);
@@ -131,11 +131,11 @@ public class ListingControllerSearchTests {
     public void searchListingsIsSuccessfullyWhenOnlyModelFilterIsApplied() {
 
         // GIVEN: 14 listing on the DB
-        List<Listing> listings = controller.allListings();
+        List<Listing> listings = listingController.allListings();
         assertThat(listings.size()).isEqualTo(14);
 
         // GIVEN: Model filter is applied
-        listings = controller.searchListings(Optional.empty(), Optional.of("3"), Optional.empty(), Optional.empty());
+        listings = listingController.searchListings(Optional.empty(), Optional.of("3"), Optional.empty(), Optional.empty());
 
         // THEN: The number of listing retrieved is right and its model is 3
         assertThat(listings.size()).isEqualTo(1);
@@ -146,11 +146,11 @@ public class ListingControllerSearchTests {
     public void searchListingsIsSuccessfullyWhenOnlyYearFilterIsApplied() {
 
         // GIVEN: 14 listing on the DB
-        List<Listing> listings = controller.allListings();
+        List<Listing> listings = listingController.allListings();
         assertThat(listings.size()).isEqualTo(14);
 
         // GIVEN: Year filter is applied
-        listings = controller.searchListings(Optional.empty(), Optional.empty(), Optional.of(2018), Optional.empty());
+        listings = listingController.searchListings(Optional.empty(), Optional.empty(), Optional.of(2018), Optional.empty());
 
         // THEN: The number of listing retrieved is right and its year is 2018
         assertThat(listings.size()).isEqualTo(3);
@@ -161,11 +161,11 @@ public class ListingControllerSearchTests {
     public void searchListingsIsSuccessfullyWhenOnlyColorFilterIsApplied() {
 
         // GIVEN: 14 listing on the DB
-        List<Listing> listings = controller.allListings();
+        List<Listing> listings = listingController.allListings();
         assertThat(listings.size()).isEqualTo(14);
 
         // GIVEN: Color filter is applied
-        listings = controller.searchListings(Optional.empty(), Optional.empty(), Optional.empty(), Optional.of("black"));
+        listings = listingController.searchListings(Optional.empty(), Optional.empty(), Optional.empty(), Optional.of("black"));
 
         // THEN: The number of listing retrieved is right and its color is black
         assertThat(listings.size()).isEqualTo(4);

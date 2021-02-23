@@ -30,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ListingControllerUploadCsvListingsFileTests {
 
     @Autowired
-    private ListingController controller;
+    private ListingController listingController;
 
     @Autowired
     private ListingRepository listingRepository;
@@ -55,11 +55,11 @@ public class ListingControllerUploadCsvListingsFileTests {
     public void uploadCsvListingIsSuccessfullyListNotEmpty() {
 
         // GIVEN: the listings are empty
-        List<Listing> listings = controller.allListings();
+        List<Listing> listings = listingController.allListings();
         assertThat(listings.size()).isEqualTo(0);
 
         // WHEN: 1 listing is inserted
-        ResponseEntity<String>  response = controller.uploadCsvListing(multipartFile, dealerId);
+        ResponseEntity<String>  response = listingController.uploadCsvListing(multipartFile, dealerId);
 
         // THEN: listing has been inserted successfully
         String responseMessage = response.getBody();
@@ -67,7 +67,7 @@ public class ListingControllerUploadCsvListingsFileTests {
         assertThat(responseMessage).isEqualTo("All listings imported successfully");
 
         // AND: the listing is retrieved successfully
-        listings = controller.allListings();
+        listings = listingController.allListings();
         assertThat(listings.size()).isEqualTo(1);
 
         // AND: the listing details are correct
@@ -85,13 +85,13 @@ public class ListingControllerUploadCsvListingsFileTests {
     public void uploadCsvListingIsSuccessfullyListIsEmpty() throws IOException{
 
         // GIVEN: the listings are empty
-        List<Listing> listings = controller.allListings();
+        List<Listing> listings = listingController.allListings();
         assertThat(listings.size()).isEqualTo(0);
 
         // WHEN: 1 listing is inserted
         File file = new File(FileParserTest.class.getClassLoader().getResource("listing_empty.csv").getFile());
         MultipartFile emptyMultipartFile = new MockMultipartFile("file", new FileInputStream(file));
-        ResponseEntity<String>  response = controller.uploadCsvListing(emptyMultipartFile, dealerId);
+        ResponseEntity<String>  response = listingController.uploadCsvListing(emptyMultipartFile, dealerId);
 
         // THEN: listing has been inserted successfully
         String responseMessage = response.getBody();
@@ -99,7 +99,7 @@ public class ListingControllerUploadCsvListingsFileTests {
         assertThat(responseMessage).isEqualTo("All listings imported successfully");
 
         // AND: the listing is retrieved successfully
-        listings = controller.allListings();
+        listings = listingController.allListings();
         assertThat(listings.size()).isEqualTo(0);
     }
 
@@ -107,12 +107,12 @@ public class ListingControllerUploadCsvListingsFileTests {
     public void uploadCsvListingIsSuccessfullyWhenImportingTwiceSameListing() {
 
         // GIVEN: the listings are empty
-        List<Listing> listings = controller.allListings();
+        List<Listing> listings = listingController.allListings();
         assertThat(listings.size()).isEqualTo(0);
 
         // WHEN: 1 listing is imported twice
-        controller.uploadCsvListing(multipartFile, dealerId);
-        ResponseEntity<String> response = controller.uploadCsvListing(multipartFile, dealerId);
+        listingController.uploadCsvListing(multipartFile, dealerId);
+        ResponseEntity<String> response = listingController.uploadCsvListing(multipartFile, dealerId);
 
         // THEN: listing has been inserted successfully
         String responseMessage = response.getBody();
@@ -120,7 +120,7 @@ public class ListingControllerUploadCsvListingsFileTests {
         assertThat(responseMessage).isEqualTo("All listings imported successfully");
 
         // AND: the number of listings retrieved is only 1
-        listings = controller.allListings();
+        listings = listingController.allListings();
         assertThat(listings.size()).isEqualTo(1);
     }
 
@@ -128,13 +128,13 @@ public class ListingControllerUploadCsvListingsFileTests {
     public void uploadCsvListingIsSuccessfullyWhenImportingLongListing() throws IOException {
 
         // GIVEN: the listings are empty
-        List<Listing> listings = controller.allListings();
+        List<Listing> listings = listingController.allListings();
         assertThat(listings.size()).isEqualTo(0);
 
         // WHEN: 1 listing is imported many listings
         File file = new File(FileParserTest.class.getClassLoader().getResource("listing_long.csv").getFile());
         MultipartFile longMultipartFile = new MockMultipartFile("file", new FileInputStream(file));
-        ResponseEntity<String> response = controller.uploadCsvListing(longMultipartFile, dealerId);
+        ResponseEntity<String> response = listingController.uploadCsvListing(longMultipartFile, dealerId);
 
         // THEN: listing has been inserted successfully
         String responseMessage = response.getBody();
@@ -142,7 +142,7 @@ public class ListingControllerUploadCsvListingsFileTests {
         assertThat(responseMessage).isEqualTo("All listings imported successfully");
 
         // AND: the number of listings retrieved is 15
-        listings = controller.allListings();
+        listings = listingController.allListings();
         assertThat(listings.size()).isEqualTo(15);
     }
 
@@ -150,13 +150,13 @@ public class ListingControllerUploadCsvListingsFileTests {
     public void uploadCsvListingBadRequestWhenImportingEmptyFile() throws IOException {
 
         // GIVEN: the listings are empty
-        List<Listing> listings = controller.allListings();
+        List<Listing> listings = listingController.allListings();
         assertThat(listings.size()).isEqualTo(0);
 
         // WHEN: 1 listing is imported many listings
         File file = new File(ListingControllerUploadCsvListingsFileTests.class.getClassLoader().getResource("empty.csv").getFile());
         MultipartFile longMultipartFile = new MockMultipartFile("file", new FileInputStream(file));
-        ResponseEntity<String> response = controller.uploadCsvListing(longMultipartFile, dealerId);
+        ResponseEntity<String> response = listingController.uploadCsvListing(longMultipartFile, dealerId);
 
         // THEN: bad request response is obtained
         String responseMessage = response.getBody();
@@ -168,11 +168,11 @@ public class ListingControllerUploadCsvListingsFileTests {
     public void uploadCsvListingNotFoundWhenDealerDoesNotExists() {
 
         // GIVEN: the listings are empty
-        List<Listing> listings = controller.allListings();
+        List<Listing> listings = listingController.allListings();
         assertThat(listings.size()).isEqualTo(0);
 
         // WHEN: 1 unknown dealer is provided
-        ResponseEntity<String> response = controller.uploadCsvListing(multipartFile, 12L);
+        ResponseEntity<String> response = listingController.uploadCsvListing(multipartFile, 12L);
 
         // THEN: not found response is obtained
         String responseMessage = response.getBody();

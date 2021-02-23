@@ -29,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ListingControllerUploadVehicleListingsTests {
 
     @Autowired
-    private ListingController controller;
+    private ListingController listingController;
 
     @Autowired
     private ListingRepository listingRepository;
@@ -51,13 +51,13 @@ public class ListingControllerUploadVehicleListingsTests {
     public void uploadVehicleListingsIsSuccessfullyListNotEmpty() {
 
         // GIVEN: the listings are empty
-        List<Listing> listings = controller.allListings();
+        List<Listing> listings = listingController.allListings();
         assertThat(listings.size()).isEqualTo(0);
 
         // WHEN: 1 listing is inserted
         List<ListingInput> listingsUpload = Arrays.asList(
                 new ListingInput("1", "mercedes", "a 180", 123, 2014, "black", 15950L));
-        ResponseEntity<String>  response = controller.uploadVehicleListings(listingsUpload, dealerId);
+        ResponseEntity<String>  response = listingController.uploadVehicleListings(listingsUpload, dealerId);
 
         // THEN: listing has been inserted successfully
         String responseMessage = response.getBody();
@@ -65,7 +65,7 @@ public class ListingControllerUploadVehicleListingsTests {
         assertThat(responseMessage).isEqualTo("All listings imported successfully");
 
         // AND: the listing is retrieved successfully
-        listings = controller.allListings();
+        listings = listingController.allListings();
         assertThat(listings.size()).isEqualTo(1);
 
         // AND: the listing details are correct
@@ -83,12 +83,12 @@ public class ListingControllerUploadVehicleListingsTests {
     public void uploadVehicleListingsIsSuccessfullyListIsEmpty() {
 
         // GIVEN: the listings are empty
-        List<Listing> listings = controller.allListings();
+        List<Listing> listings = listingController.allListings();
         assertThat(listings.size()).isEqualTo(0);
 
         // WHEN: 1 listing is inserted
         List<ListingInput> listingsUpload = new ArrayList<>();
-        ResponseEntity<String>  response = controller.uploadVehicleListings(listingsUpload, dealerId);
+        ResponseEntity<String>  response = listingController.uploadVehicleListings(listingsUpload, dealerId);
 
         // THEN: listing has been inserted successfully
         String responseMessage = response.getBody();
@@ -96,7 +96,7 @@ public class ListingControllerUploadVehicleListingsTests {
         assertThat(responseMessage).isEqualTo("All listings imported successfully");
 
         // AND: the listing is retrieved successfully
-        listings = controller.allListings();
+        listings = listingController.allListings();
         assertThat(listings.size()).isEqualTo(0);
     }
 
@@ -104,13 +104,13 @@ public class ListingControllerUploadVehicleListingsTests {
     public void uploadVehicleListingsReturnsBadRequestWhenMalformedListingsAreUploaded() {
 
         // GIVEN: the listings are empty
-        List<Listing> listings = controller.allListings();
+        List<Listing> listings = listingController.allListings();
         assertThat(listings.size()).isEqualTo(0);
 
         // WHEN: 1 listing with malformed listings are provided
         List<ListingInput> listingsUpload = Arrays.asList(
                 new ListingInput("1", null, "a 180", 123, 2014, "black", 15950L));
-        ResponseEntity<String> response = controller.uploadVehicleListings(listingsUpload, dealerId);
+        ResponseEntity<String> response = listingController.uploadVehicleListings(listingsUpload, dealerId);
 
         // THEN: returns bad request
         String responseMessage = response.getBody();
@@ -123,14 +123,14 @@ public class ListingControllerUploadVehicleListingsTests {
     public void uploadVehicleListingsIsSuccessfullyWhenImportingTwiceSameListing() {
 
         // GIVEN: the listings are empty
-        List<Listing> listings = controller.allListings();
+        List<Listing> listings = listingController.allListings();
         assertThat(listings.size()).isEqualTo(0);
 
         // WHEN: 1 listing is imported twice
         List<ListingInput> listingsUpload = Arrays.asList(
                 new ListingInput("1", "mercedes", "a 180", 123, 2014, "black", 15950L));
-        controller.uploadVehicleListings(listingsUpload, dealerId);
-        ResponseEntity<String>  response = controller.uploadVehicleListings(listingsUpload, dealerId);
+        listingController.uploadVehicleListings(listingsUpload, dealerId);
+        ResponseEntity<String>  response = listingController.uploadVehicleListings(listingsUpload, dealerId);
 
         // THEN: listing has been inserted successfully
         String responseMessage = response.getBody();
@@ -138,7 +138,7 @@ public class ListingControllerUploadVehicleListingsTests {
         assertThat(responseMessage).isEqualTo("All listings imported successfully");
 
         // AND: the number of listings retrieved is only 1
-        listings = controller.allListings();
+        listings = listingController.allListings();
         assertThat(listings.size()).isEqualTo(1);
     }
 
@@ -146,7 +146,7 @@ public class ListingControllerUploadVehicleListingsTests {
     public void uploadVehicleListingsIsSuccessfullyWhenImportingLongListing() {
 
         // GIVEN: the listings are empty
-        List<Listing> listings = controller.allListings();
+        List<Listing> listings = listingController.allListings();
         assertThat(listings.size()).isEqualTo(0);
 
         // WHEN: 1 listing is imported many listings
@@ -165,8 +165,8 @@ public class ListingControllerUploadVehicleListingsTests {
                 new ListingInput("12", "mercedes", "a 180", 123, 2016, "black", 15950L),
                 new ListingInput("13", "skoda", "a 180", 123, 2018, "red", 15000L),
                 new ListingInput("14", "mercedes", "a 180", 123, 2014, "blue", 15000L));
-        controller.uploadVehicleListings(listingsUpload, dealerId);
-        ResponseEntity<String>  response = controller.uploadVehicleListings(listingsUpload, dealerId);
+        listingController.uploadVehicleListings(listingsUpload, dealerId);
+        ResponseEntity<String>  response = listingController.uploadVehicleListings(listingsUpload, dealerId);
 
         // THEN: listing has been inserted successfully
         String responseMessage = response.getBody();
@@ -174,7 +174,7 @@ public class ListingControllerUploadVehicleListingsTests {
         assertThat(responseMessage).isEqualTo("All listings imported successfully");
 
         // AND: the number of listings retrieved is only 14
-        listings = controller.allListings();
+        listings = listingController.allListings();
         assertThat(listings.size()).isEqualTo(14);
     }
 
@@ -182,11 +182,11 @@ public class ListingControllerUploadVehicleListingsTests {
     public void uploadVehicleListingsNotFoundWhenDealerDoesNotExists() {
 
         // GIVEN: the listings are empty
-        List<Listing> listings = controller.allListings();
+        List<Listing> listings = listingController.allListings();
         assertThat(listings.size()).isEqualTo(0);
 
         // WHEN: 1 unknown dealer is provided
-        ResponseEntity<String> response = controller.uploadVehicleListings(Collections.emptyList(), 12L);
+        ResponseEntity<String> response = listingController.uploadVehicleListings(Collections.emptyList(), 12L);
 
         // THEN: not found response is obtained
         String responseMessage = response.getBody();

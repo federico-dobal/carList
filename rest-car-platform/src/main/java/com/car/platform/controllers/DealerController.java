@@ -24,7 +24,7 @@ public class DealerController {
      * @return
      */
     @GetMapping("/dealers")
-    List<Dealer> allDealers() {
+    public List<Dealer> allDealers() {
         return repository.findAll();
     }
 
@@ -34,7 +34,7 @@ public class DealerController {
      * @return
      */
     @PostMapping("/dealer")
-    ResponseEntity<String> newDealer(@RequestBody DealerInput dealer) {
+    public ResponseEntity<String> newDealer(@RequestBody DealerInput dealer) {
         Dealer dealerFromDb = repository.findByName(dealer.getName());
         // Only insert if it does not exists
         if (dealerFromDb == null) {
@@ -52,7 +52,7 @@ public class DealerController {
      * @return dealer detail
      */
     @GetMapping("/dealer/{id}")
-    Dealer getSingleDealer(@PathVariable Long id) {
+    public Dealer getSingleDealer(@PathVariable Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new DealerNotFoundException(id));
     }
