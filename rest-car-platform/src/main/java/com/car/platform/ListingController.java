@@ -89,7 +89,6 @@ class ListingController {
         } else {
             List<Listing> allListings = FileParser.parseFile(file, dealerId);
             for (Listing newListing : allListings) {
-                System.out.println(newListing.getModel());
                 Listing listingFromDb = repository.findByCodeAndDealerId(newListing.getCode(), newListing.getDealerId());
                 if (listingFromDb == null) {
                     repository.save(newListing);
@@ -99,7 +98,9 @@ class ListingController {
                 }
 
             }
-            return ResponseEntity.ok().build();
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body("All listings imported successfully");
         }
     }
 
@@ -142,14 +143,14 @@ class ListingController {
                 }
             }
 
-            return ResponseEntity.ok().build();
+            return ResponseEntity.status(HttpStatus.OK).body("All listings imported successfully");
         }
     }
 
     /**
      * Retrieves a single listing by its id
      * @param id listing id
-     * @return loisting detail
+     * @return listing detail
      */
     @GetMapping("/listing/{id}")
     Listing one(@PathVariable Long id) {
