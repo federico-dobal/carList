@@ -29,7 +29,6 @@ public class DealerControllerTests {
     @Autowired
     private DealerRepository dealerRepository;
 
-    private static Long dealerId;
     private static String DEALER_NAME_1 = "dealerName_1";;
     private static String DEALER_NAME_2 = "dealerName_2";;
 
@@ -42,8 +41,8 @@ public class DealerControllerTests {
     public void addDealer() {
 
         // GIVEN: no dealers in the DB
-        List<Dealer> listings = dealerController.allDealers();
-        assertThat(listings.size()).isEqualTo(0);
+        List<Dealer> dealers = dealerController.allDealers();
+        assertThat(dealers.size()).isEqualTo(0);
 
         // GIVEN: A new dealer is added
         ResponseEntity<String>response = dealerController.newDealer(new DealerInput(DEALER_NAME_1));
@@ -52,10 +51,10 @@ public class DealerControllerTests {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isEqualTo("Dealer inserted successfully");
 
-        listings = dealerController.allDealers();
-        assertThat(listings.size()).isEqualTo(1);
+        dealers = dealerController.allDealers();
+        assertThat(dealers.size()).isEqualTo(1);
 
-        Dealer actualDealer = listings.get(0);
+        Dealer actualDealer = dealers.get(0);
         assertThat(actualDealer.getName()).isEqualTo(DEALER_NAME_1);
     }
 
@@ -63,8 +62,8 @@ public class DealerControllerTests {
     public void addSameDealerTwice() {
 
         // GIVEN: no dealers in the DB
-        List<Dealer> listings = dealerController.allDealers();
-        assertThat(listings.size()).isEqualTo(0);
+        List<Dealer> dealers = dealerController.allDealers();
+        assertThat(dealers.size()).isEqualTo(0);
 
         // WHEN: A new dealer is added
         ResponseEntity<String>response = dealerController.newDealer(new DealerInput(DEALER_NAME_1));
@@ -79,10 +78,10 @@ public class DealerControllerTests {
         assertThat(response.getBody()).isEqualTo("Dealer cannot be inserted");
 
         // AND: there is only one dealer and has same name than previous inserted
-        listings = dealerController.allDealers();
-        assertThat(listings.size()).isEqualTo(1);
+        dealers = dealerController.allDealers();
+        assertThat(dealers.size()).isEqualTo(1);
 
-        Dealer actualDealer = listings.get(0);
+        Dealer actualDealer = dealers.get(0);
         assertThat(actualDealer.getName()).isEqualTo(DEALER_NAME_1);
     }
 
@@ -90,8 +89,8 @@ public class DealerControllerTests {
     public void addTwoDifferentDealers() {
 
         // GIVEN: no dealers in the DB
-        List<Dealer> listings = dealerController.allDealers();
-        assertThat(listings.size()).isEqualTo(0);
+        List<Dealer> dealers = dealerController.allDealers();
+        assertThat(dealers.size()).isEqualTo(0);
 
         // WHEN: A new dealer is added
         ResponseEntity<String>response = dealerController.newDealer(new DealerInput(DEALER_NAME_1));
@@ -106,13 +105,96 @@ public class DealerControllerTests {
         assertThat(response.getBody()).isEqualTo("Dealer inserted successfully");
 
         // AND: there is only one dealer and has same name than previous inserted
-        listings = dealerController.allDealers();
-        assertThat(listings.size()).isEqualTo(2);
+        dealers = dealerController.allDealers();
+        assertThat(dealers.size()).isEqualTo(2);
 
-        Dealer actualDealer = listings.get(0);
+        Dealer actualDealer = dealers.get(0);
         assertThat(actualDealer.getName()).isEqualTo(DEALER_NAME_1);
 
-        actualDealer = listings.get(1);
+        actualDealer = dealers.get(1);
+        assertThat(actualDealer.getName()).isEqualTo(DEALER_NAME_2);
+    }
+
+
+
+    @Test
+    public void addDealerAndGetDetailsWithSearchById() {
+
+        // GIVEN: no dealers in the DB
+        List<Dealer> dealers = dealerController.allDealers();
+        assertThat(dealers.size()).isEqualTo(0);
+
+        // GIVEN: A new dealer is added
+        ResponseEntity<String>response = dealerController.newDealer(new DealerInput(DEALER_NAME_1));
+
+        // THEN: there is only one dealer and has same name than inserted
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isEqualTo("Dealer inserted successfully");
+
+        // AND only one dealer is retrieved
+        dealers = dealerController.allDealers();
+        assertThat(dealers.size()).isEqualTo(1);
+
+        // AND it can be retrieved by its id
+        Dealer actualDealer = dealerController.getSingleDealer(dealers.get(0).getId());
+        assertThat(actualDealer.getName()).isEqualTo(DEALER_NAME_1);
+    }
+
+    @Test
+    public void addSameDealerTwiceAndGetDetailsWithSearchById() {
+
+        // GIVEN: no dealers in the DB
+        List<Dealer> dealers = dealerController.allDealers();
+        assertThat(dealers.size()).isEqualTo(0);
+
+        // WHEN: A new dealer is added
+        ResponseEntity<String>response = dealerController.newDealer(new DealerInput(DEALER_NAME_1));
+
+        // AND: the same dealer is tried again
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isEqualTo("Dealer inserted successfully");
+        response = dealerController.newDealer(new DealerInput(DEALER_NAME_1));
+
+        // THEN: the request fails with BAD_REQUEST
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody()).isEqualTo("Dealer cannot be inserted");
+
+        // AND: there is only one dealer and has same name than previous inserted
+        dealers = dealerController.allDealers();
+        assertThat(dealers.size()).isEqualTo(1);
+
+        // AND its details is retrieved by its id
+        Dealer actualDealer = dealerController.getSingleDealer(dealers.get(0).getId());
+        assertThat(actualDealer.getName()).isEqualTo(DEALER_NAME_1);
+    }
+
+    @Test
+    public void addTwoDifferentDealersAndGetDetailsWithSearchById() {
+
+        // GIVEN: no dealers in the DB
+        List<Dealer> dealers = dealerController.allDealers();
+        assertThat(dealers.size()).isEqualTo(0);
+
+        // WHEN: A new dealer is added
+        ResponseEntity<String>response = dealerController.newDealer(new DealerInput(DEALER_NAME_1));
+
+        // AND: the another dealer is tried again
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isEqualTo("Dealer inserted successfully");
+        response = dealerController.newDealer(new DealerInput(DEALER_NAME_2));
+
+        // THEN: the request succeeds
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isEqualTo("Dealer inserted successfully");
+
+        dealers = dealerController.allDealers();
+        assertThat(dealers.size()).isEqualTo(2);
+
+        // AND: the details are retrieved successfully by its ids
+        Dealer actualDealer = dealerController.getSingleDealer(dealers.get(0).getId());
+        assertThat(actualDealer.getName()).isEqualTo(DEALER_NAME_1);
+
+        actualDealer = dealerController.getSingleDealer(dealers.get(1).getId());
         assertThat(actualDealer.getName()).isEqualTo(DEALER_NAME_2);
     }
 
