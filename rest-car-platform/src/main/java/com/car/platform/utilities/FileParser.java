@@ -10,12 +10,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-class FileParserException extends RuntimeException {
-    FileParserException(String message) {
-        super(message);
-    }
-}
-
 public class FileParser {
 
     public static List<Listing> parseFile(MultipartFile file, Long dealerId) throws IllegalArgumentException {
