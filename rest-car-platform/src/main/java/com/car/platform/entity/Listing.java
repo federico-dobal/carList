@@ -1,5 +1,8 @@
 package com.car.platform.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -8,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
+@Getter
+@Setter
 public class Listing implements Serializable {
 
     private @Id @GeneratedValue Long id;
@@ -33,78 +38,6 @@ public class Listing implements Serializable {
         this.color = color;
         this.price = price;
 
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Long getDealerId() {
-        return dealerId;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getMake() {
-        return make;
-    }
-
-    public String getModel() {
-        return model;
-    }
-
-    public Integer getPowerInPs() {
-        return powerInPs;
-    }
-
-    public Integer getYear() {
-        return year;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public Long getPrice() {
-        return price;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setDealerId(Long dealerId) {
-        this.dealerId = dealerId;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public void setMake(String make) {
-        this.make = make;
-    }
-
-    public void setModel(String model) {
-        this.model = model;
-    }
-
-    public void setPowerInPs(Integer powerInPs) {
-        this.powerInPs = powerInPs;
-    }
-
-    public void setYear(Integer year) {
-        this.year = year;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public void setPrice(Long price) {
-        this.price = price;
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.car.platform;
 
 import com.car.platform.controllers.DealerController;
 import com.car.platform.entity.Dealer;
+import com.car.platform.exceptions.DealerNotFoundException;
 import com.car.platform.model.DealerInput;
 import com.car.platform.repository.DealerRepository;
 import org.junit.Before;
@@ -196,6 +197,20 @@ public class DealerControllerTests {
 
         actualDealer = dealerController.getSingleDealer(dealers.get(1).getId());
         assertThat(actualDealer.getName()).isEqualTo(DEALER_NAME_2);
+    }
+
+    @Test(expected = DealerNotFoundException.class)
+    public void dealerNotFound() {
+
+        // GIVEN: no dealers in the DB
+        List<Dealer> dealers = dealerController.allDealers();
+        assertThat(dealers.size()).isEqualTo(0);
+
+        // WHEN: try to retrieve a dealer tha do not exists
+        dealerController.getSingleDealer(100L);
+
+        // THEN a DealerNotFoundException is triggered
+
     }
 
 }

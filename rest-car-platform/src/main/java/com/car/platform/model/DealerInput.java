@@ -1,7 +1,12 @@
 package com.car.platform.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Objects;
 
+@Getter
+@Setter
 public class DealerInput {
 
     private String name;
@@ -9,14 +14,6 @@ public class DealerInput {
     DealerInput() {}
 
     public DealerInput(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
         this.name = name;
     }
 

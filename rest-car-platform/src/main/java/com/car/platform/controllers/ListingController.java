@@ -143,7 +143,7 @@ class ListingController {
             for (ListingInput listing : newListings)
             {
                 Listing newListing = new Listing(dealerId, listing.getCode(), listing.getMake(), listing.getModel(),
-                        listing.getkW(), listing.getYear(), listing.getColor(), listing.getPrice());
+                        listing.getKW(), listing.getYear(), listing.getColor(), listing.getPrice());
 
                 saveOrUpdateListing(newListing);
             }
@@ -158,7 +158,7 @@ class ListingController {
      * @return listing detail
      */
     @GetMapping("/listing/{id}")
-    Listing one(@PathVariable Long id) {
+    Listing getSingleListingDetails(@PathVariable Long id) {
 
         return repository.findById(id)
                 .orElseThrow(() -> new ListingNotFoundException(id));
